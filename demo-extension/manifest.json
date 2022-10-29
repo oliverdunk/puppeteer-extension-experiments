@@ -1,0 +1,13 @@
+{
+  "name": "Hello World",
+  "version": "0.1",
+  "manifest_version": 3,
+  "description": "Basic Hello World Extension",
+  "action": {
+    "default_title": "Hello World",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

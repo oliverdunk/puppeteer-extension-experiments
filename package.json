@@ -1,0 +1,19 @@
+{
+  "name": "puppeteer-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "puppeteer": "file:/Users/oliverdunk/Documents/web/puppeteer/packages/puppeteer"
+  }
+}
