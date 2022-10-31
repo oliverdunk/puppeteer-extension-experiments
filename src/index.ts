@@ -1,5 +1,4 @@
 import puppeteer from "puppeteer";
-import { getDefaultArgs } from "./args";
 import { openPopup, waitForExtensionBackground } from "./utils";
 
 async function run() {
