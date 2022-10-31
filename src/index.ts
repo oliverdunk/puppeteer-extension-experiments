@@ -5,8 +5,10 @@ import { openPopup, waitForExtensionBackground } from "./utils";
 async function run() {
   const browser = await puppeteer.launch({
     headless: false,
-    args: [...getDefaultArgs(), "--load-extension=demo-extension"],
-    ignoreDefaultArgs: true,
+    args: [
+      "--disable-extensions-except=demo-extension",
+      "--load-extension=demo-extension",
+    ],
   });
 
   const backgroundPage = await waitForExtensionBackground(browser);
