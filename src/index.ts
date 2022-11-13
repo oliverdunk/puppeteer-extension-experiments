@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { openPopup, waitForExtensionBackground } from "./utils";
+import { openPopup, waitForExtensionWorker } from "./utils";
 
 async function run() {
   const browser = await puppeteer.launch({
@@ -10,7 +10,7 @@ async function run() {
     ],
   });
 
-  const backgroundPage = await waitForExtensionBackground(browser);
+  const backgroundPage = await waitForExtensionWorker(browser);
   const popup = await openPopup(browser, backgroundPage, "/popup.html");
 
   const button = await popup.waitForSelector("button");

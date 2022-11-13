@@ -19,33 +19,25 @@ export function getExtensionId(url: string) {
 }
 
 /**
- * Waits for an extension background page/worker to load. If omitted, returns
- * the first extension background to load without checking the ID.
+ * Waits for an extension worker to load. If omitted, returns the first
+ * worker to load without checking the ID.
  *
  * @param browser Browser to wait for background page in.
  * @param id ID of extension. Returns first extension to load if omitted.
  */
-export async function waitForExtensionBackground(
+export async function waitForExtensionWorker(
   browser: puppeteer.Browser,
   id?: string
-): Promise<puppeteer.Page | puppeteer.WebWorker> {
+): Promise<puppeteer.WebWorker> {
   const idMatches = (target: puppeteer.Target) =>
     id ? getExtensionId(target.url()) === id : true;
 
   // See https://pptr.dev/guides/chrome-extensions
-  const backgroundPageTarget = await browser.waitForTarget(
-    (target) =>
-      (target.type() === "background_page" ||
-        target.type() === "service_worker") &&
-      idMatches(target)
+  const workerTarget = await browser.waitForTarget(
+    (target) => target.type() === "service_worker" && idMatches(target)
   );
 
-  const backgroundPage =
-    backgroundPageTarget.type() === "service_worker"
-      ? await backgroundPageTarget.worker()
-      : await backgroundPageTarget.page();
-
-  return backgroundPage;
+  return workerTarget.worker();
 }
 
 /**
@@ -59,11 +51,11 @@ export async function waitForExtensionBackground(
  */
 export async function openPopup(
   browser: puppeteer.Browser,
-  background: puppeteer.Page | puppeteer.WebWorker,
+  worker: puppeteer.WebWorker,
   path: string
 ): Promise<puppeteer.Page> {
-  const extensionId = getExtensionId(background.url());
-  await background.evaluate("chrome.action.openPopup();");
+  const extensionId = getExtensionId(worker.url());
+  await worker.evaluate("chrome.action.openPopup();");
 
   const popup = await browser.waitForTarget(
     (target) =>
