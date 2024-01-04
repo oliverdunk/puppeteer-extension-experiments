@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import * as puppeteer from "puppeteer";
 
 /**
  * Gets an extension ID from a URL.
@@ -59,14 +59,12 @@ export async function openPopup(
 
   const popup = await browser.waitForTarget(
     (target) =>
-      target.type() === "other" &&
+      target.type() === "page" &&
       target.url() === `chrome-extension://${extensionId}${path}`
   );
 
-  // We need to overwrite this because the default _isPageTargetCallback does
-  // not handle targets of type "other", and this causes subsequent .page()
-  // calls to return null.
-  popup._isPageTargetCallback = (_) => true;
-
-  return popup.page();
+  // We specified that we wanted a page in our condition above but what we
+  // get back is not actually a page. This is due to a type mismatch caused by
+  // an implementation detail in Chromium (https://crbug.com/1515626)
+  return popup.asPage();
 }
